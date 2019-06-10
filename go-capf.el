@@ -34,14 +34,6 @@
   :group 'completion
   :prefix "go-capf-")
 
-(with-eval-after-load 'go-mode
-  (add-hook 'kill-emacs-hook
-            (lambda ()
-              (when (file-exists-p (expand-file-name
-                                    (concat "gocode-daemon." (or (getenv "USER") "all"))
-                                    temporary-file-directory))
-                (ignore-errors (call-process "gocode" nil nil nil "close"))))))
-
 (defcustom go-capf-gocode (executable-find "gocode")
   "Path to gocode binary."
   :type 'file
@@ -51,6 +43,12 @@
   "Additional flags to pass to gocode."
   :type 'file
   :group 'go-capf)
+
+(defun go-capf--clean-up-gocode ()
+  (when (file-exists-p (expand-file-name
+                        (concat "gocode-daemon." (or (getenv "USER") "all"))
+                        temporary-file-directory))
+    (ignore-errors (call-process "gocode" nil nil nil "close"))))
 
 (defun go-capf--completions (&rest _ignore)
   "Collect list of completions at point."
@@ -74,6 +72,8 @@
   "Return possible completions for go code at point."
   (unless go-capf-gocode
     (error "Binary \"gocode\" either not installed or not in path"))
+  (unless (memq #'go-capf--clean-up-gocode kill-emacs-hook)
+    (add-hook 'kill-emacs-hook #'go-capf--clean-up-gocode))
   (list (save-excursion
           (unless (memq (char-before) '(?\. ?\t ?\n ?\ ))
             (forward-word -1))
