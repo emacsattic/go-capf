@@ -41,7 +41,12 @@
 
 (defcustom go-capf-gocode-flags nil
   "Additional flags to pass to gocode."
-  :type 'file
+  :type '(list string)
+  :group 'go-capf)
+
+(defcustom go-capf-use-sexp-formatter nil
+  "Use gocode's s-expression format instead of csv."
+  :type 'boolean
   :group 'go-capf)
 
 (defun go-capf--clean-up-gocode ()
@@ -49,6 +54,18 @@
                         (concat "gocode-daemon." (or (getenv "USER") "all"))
                         temporary-file-directory))
     (ignore-errors (call-process "gocode" nil nil nil "close"))))
+
+(defun go-capf--parse-csv ()
+  "Collect function names from gocode -f=csv output."
+  (let (completions)
+    (while (not (eobp))
+      (beginning-of-line)
+      (push (buffer-substring
+             (search-forward ",,")
+             (- (search-forward ",,") 2))
+            completions)
+      (forward-line))
+    completions))
 
 (defun go-capf--completions (&rest _ignore)
   "Collect list of completions at point."
@@ -59,12 +76,16 @@
                              go-capf-gocode
                              nil temp nil)
                        go-capf-gocode-flags
-                       (list "-f=sexp" "autocomplete"
+                       (list (if go-capf-use-sexp-formatter
+                                 "-f=sexp" "-f=csv")
+                             "autocomplete"
                              (or (buffer-file-name) "")
                              (format "c%d" (- (point) 1)))))
         (with-current-buffer temp
           (goto-char (point-min))
-          (mapcar #'cadr (read temp)))
+          (if go-capf-use-sexp-formatter
+              (mapcar #'cadr (read temp))
+            (go-capf--parse-csv)))
       (kill-buffer temp))))
 
 ;;;###autoload
