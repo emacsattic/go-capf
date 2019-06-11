@@ -90,8 +90,11 @@
           (unless (memq (char-before) '(?\. ?\t ?\n ?\ ))
             (forward-word -1))
           (point))
-        (point)
         (completion-table-with-cache #'go-capf--completions)
+        (save-excursion
+          (unless (memq (char-after) '(?\. ?\t ?\n ?\ ?\())
+            (forward-word 1))
+          (point))
         :exclusive 'no))
 
 (provide 'go-capf)
