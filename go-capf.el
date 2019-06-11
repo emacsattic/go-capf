@@ -42,6 +42,10 @@
   "Additional flags to pass to gocode."
   :type '(list string))
 
+(defcustom go-capf-ignore-case nil
+  "Should completion ignore case."
+  :type 'boolean)
+
   :type 'boolean)
 
 (defun go-capf--clean-up-gocode ()
@@ -90,11 +94,12 @@
           (unless (memq (char-before) '(?\. ?\t ?\n ?\ ))
             (forward-word -1))
           (point))
-        (completion-table-with-cache #'go-capf--completions)
         (save-excursion
           (unless (memq (char-after) '(?\. ?\t ?\n ?\ ?\())
             (forward-word 1))
           (point))
+        (completion-table-with-cache #'go-capf--completions
+                                     go-capf-ignore-case)
         :exclusive 'no))
 
 (provide 'go-capf)
