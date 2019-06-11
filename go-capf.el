@@ -46,6 +46,8 @@
   "Should completion ignore case."
   :type 'boolean)
 
+(defcustom go-capf-show-type t
+  "Should completion show types."
   :type 'boolean)
 
 (defun go-capf--clean-up-gocode ()
@@ -59,10 +61,20 @@
   (let (completions)
     (while (not (eobp))
       (beginning-of-line)
-      (push (buffer-substring
-             (search-forward ",,")
-             (- (search-forward ",,") 2))
-            completions)
+      (let* ((type (buffer-substring
+                    (point)
+                    (- (search-forward ",,") 2)))
+             (name (buffer-substring
+                    (point)
+                    (- (search-forward ",,") 2)))
+             (sig (buffer-substring
+                   (point)
+                   (- (line-end-position) 2))))
+        (put-text-property 0 (length name) 'go-capf-sig
+                           sig name)
+        (put-text-property 0 (length name) 'go-capf-type
+                           type name)
+        (push name completions))
       (forward-line))
     completions))
 
@@ -83,6 +95,11 @@
           (go-capf--parse-csv))
       (kill-buffer temp))))
 
+(defun go-capf--annotate (str)
+  "Extract type of completed symbol as annotation"
+  (let ((sig (get-text-property 0 'go-capf-sig str)))
+    (when sig (concat "\t : " sig))))
+
 ;;;###autoload
 (defun go-completion-at-point-function ()
   "Return possible completions for go code at point."
@@ -100,6 +117,8 @@
           (point))
         (completion-table-with-cache #'go-capf--completions
                                      go-capf-ignore-case)
+        :annotation-function (and go-capf-show-type
+                                  #'go-capf--annotate)
         :exclusive 'no))
 
 (provide 'go-capf)
