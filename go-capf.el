@@ -51,6 +51,7 @@
   :type 'boolean)
 
 (defun go-capf--clean-up-gocode ()
+  "Hook to clean up gocode daemon when emacs closes."
   (when (file-exists-p (expand-file-name
                         (concat "gocode-daemon." (or (getenv "USER") "all"))
                         temporary-file-directory))
