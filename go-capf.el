@@ -42,8 +42,6 @@
   "Additional flags to pass to gocode."
   :type '(list string))
 
-(defcustom go-capf-use-sexp-formatter nil
-  "Use gocode's s-expression format instead of csv."
   :type 'boolean)
 
 (defun go-capf--clean-up-gocode ()
@@ -73,16 +71,12 @@
                              go-capf-gocode
                              nil temp nil)
                        go-capf-gocode-flags
-                       (list (if go-capf-use-sexp-formatter
-                                 "-f=sexp" "-f=csv")
-                             "autocomplete"
+                       (list "-f=csv" "autocomplete"
                              (or (buffer-file-name) "")
                              (format "c%d" (- (point) 1)))))
         (with-current-buffer temp
           (goto-char (point-min))
-          (if go-capf-use-sexp-formatter
-              (mapcar #'cadr (read temp))
-            (go-capf--parse-csv)))
+          (go-capf--parse-csv))
       (kill-buffer temp))))
 
 ;;;###autoload
