@@ -36,18 +36,15 @@
 
 (defcustom go-capf-gocode (executable-find "gocode")
   "Path to gocode binary."
-  :type 'file
-  :group 'go-capf)
+  :type 'file)
 
 (defcustom go-capf-gocode-flags nil
   "Additional flags to pass to gocode."
-  :type '(list string)
-  :group 'go-capf)
+  :type '(list string))
 
 (defcustom go-capf-use-sexp-formatter nil
   "Use gocode's s-expression format instead of csv."
-  :type 'boolean
-  :group 'go-capf)
+  :type 'boolean)
 
 (defun go-capf--clean-up-gocode ()
   (when (file-exists-p (expand-file-name
