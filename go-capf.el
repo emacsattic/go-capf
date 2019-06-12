@@ -70,7 +70,7 @@
                     (- (search-forward ",,") 2)))
              (sig (buffer-substring
                    (point)
-                   (- (line-end-position) 2))))
+                   (- (search-forward ",,") 2))))
         (put-text-property 0 (length name) 'go-capf-sig
                            sig name)
         (put-text-property 0 (length name) 'go-capf-type
