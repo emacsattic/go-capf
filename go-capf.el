@@ -38,7 +38,7 @@
   "Path to gocode binary."
   :type 'file)
 
-(defcustom go-capf-gocode-flags nil
+(defcustom go-capf-gocode-flags '("-builtin")
   "Additional flags to pass to gocode."
   :type '(list string))
 
