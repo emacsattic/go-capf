@@ -1,4 +1,4 @@
-;;; go-capf.el --- completion-at-point backend for go -*- lexical-binding: t -*-
+;;; go-capf.el --- Completion-at-point backend for go -*- lexical-binding: t -*-
 
 ;; Author: Philip K. <philip@warpmail.net>
 ;; Version: 0.1.0
