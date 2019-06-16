@@ -1,7 +1,7 @@
 ;;; go-capf.el --- Completion-at-point backend for go -*- lexical-binding: t -*-
 
 ;; Author: Philip K. <philip@warpmail.net>
-;; Version: 0.1.0
+;; Version: 1.0.0
 ;; Keywords: languages, abbrev, convenience
 ;; Package-Requires: ((emacs "24.4"))
 ;; URL: https://git.sr.ht/~zge/go-capf
