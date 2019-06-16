@@ -51,7 +51,7 @@
   :type 'boolean)
 
 (defun go-capf--clean-up-gocode ()
-  "Hook to clean up gocode daemon when emacs closes."
+  "Hook to clean up gocode daemon when Emacs closes."
   (when (file-exists-p (expand-file-name
                         (concat "gocode-daemon." (or (getenv "USER") "all"))
                         temporary-file-directory))
@@ -97,7 +97,7 @@
       (kill-buffer temp))))
 
 (defun go-capf--annotate (str)
-  "Extract type of completed symbol as annotation"
+  "Extract type of completed symbol from STR as annotation."
   (let ((sig (get-text-property 0 'go-capf-sig str)))
     (when sig (concat "\t : " sig))))
 
