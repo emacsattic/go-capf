@@ -38,6 +38,11 @@
   "Path to gocode binary."
   :type 'file)
 
+(defcustom go-capf-special-chars
+  '(?\. ?, ?\t ?\n ?\ ?\; ?\( ?\)  ?\n ?\t ? ?\" ?\')
+  "List of characters that wrap a symbol"
+  :type '(list character))
+
 (defcustom go-capf-gocode-flags '("-builtin")
   "Additional flags to pass to gocode."
   :type '(list string))
@@ -109,12 +114,12 @@
   (unless (memq #'go-capf--clean-up-gocode kill-emacs-hook)
     (add-hook 'kill-emacs-hook #'go-capf--clean-up-gocode))
   (list (save-excursion
-          (unless (memq (char-before) '(?\. ?\t ?\n ?\ ))
-            (forward-word -1))
+          (unless (memq (char-before) go-capf-special-chars)
+            (backward-sexp))
           (point))
         (save-excursion
-          (unless (memq (char-after) '(?\. ?\t ?\n ?\ ?\())
-            (forward-word 1))
+          (unless (memq (char-after) go-capf-special-chars)
+            (forward-sexp))
           (point))
         (completion-table-with-cache #'go-capf--completions
                                      go-capf-ignore-case)
