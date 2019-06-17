@@ -21,13 +21,11 @@ something like this:
 	  :config
 	  (add-hook 'go-mode-hook
 				(lambda ()
-				  (add-hook 'completion-at-point-functions
-							#'go-completion-at-point-function
+				  (add-hook 'completion-at-point-functions #'go-capf
 							nil t))))
 
-This will let `completion-at-point` know that it should try
-`go-completion-at-point-function` _first_ when looking for completions,
-in `go-mode` buffers.
+This will let `completion-at-point` know that it should try `go-capf`
+_first_ when looking for completions, in `go-mode` buffers.
 
 Also make sure that `completion-at-point` or `complete-symbol` is
 actually bound.

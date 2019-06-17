@@ -107,7 +107,7 @@
     (when sig (concat "\t : " sig))))
 
 ;;;###autoload
-(defun go-completion-at-point-function ()
+(defun go-capf ()
   "Return possible completions for go code at point."
   (unless go-capf-gocode
     (error "Binary \"gocode\" either not installed or not in path"))
