@@ -34,7 +34,7 @@
   :group 'completion
   :prefix "go-capf-")
 
-(defcustom go-capf-gocode (executable-find "gocode")
+(defcustom go-capf-gocode "gocode"
   "Path to gocode binary."
   :type 'file)
 
