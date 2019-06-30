@@ -13,7 +13,7 @@ as [ivy] might be worth recommending.
 How to use
 ----------
 
-Using MELPA and `use-package`, a minimal but sufficient setup might look
+Using [MELPA] and `use-package`, a minimal but sufficient setup might look
 something like this:
 
 	(use-package go-capf
@@ -58,6 +58,7 @@ Public Domain Dedication][cc0] license.
 
 [gocode]: https://github.com/mdempsky/gocode
 [ivy]: https://github.com/abo-abo/swiper#ivy
+[MELPA]: https://melpa.org/#/go-capf
 [screenshot1]: https://files.catbox.moe/jx8681.png
 [screenshot2]: https://files.catbox.moe/jt2tdl.png
 [mailing list]: https://lists.sr.ht/~zge/capf
