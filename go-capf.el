@@ -21,7 +21,7 @@
 ;; with a custom `completion-at-point' function, that should be added to
 ;; `completion-at-point-functions' as so:
 ;;
-;;   (add-to-list 'completion-at-point-functions #'go-completion-at-point-function)
+;;   (add-to-list 'completion-at-point-functions #'go-capf)
 ;;
 ;; Note that this requires gocode (https://github.com/mdempsky/gocode)
 ;; to be installed on your system, that's compatible with the version of
