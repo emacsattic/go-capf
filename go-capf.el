@@ -55,6 +55,10 @@
   "Should completion show types."
   :type 'boolean)
 
+(defcustom go-capf-add-braces t
+  "Should completion show types."
+  :type 'boolean)
+
 (defun go-capf--clean-up-gocode ()
   "Hook to clean up gocode daemon when Emacs closes."
   (when (file-exists-p (expand-file-name
@@ -106,6 +110,26 @@
   (let ((sig (get-text-property 0 'go-capf-sig str)))
     (when sig (concat "\t : " sig))))
 
+(defun go-capf--exit-func (str status)
+  "Extract type of completed symbol from STR as annotation."
+  (let ((type (get-text-property 0 'go-capf-type str))
+        (sig (get-text-property 0 'go-capf-sig str)))
+    (catch 'nothing
+      (when (memq status '(finished exact))
+        (cond ((and (string= type "type")
+                    (string= sig "struct"))
+               (insert "{}"))
+              ((and (string= type "var")
+                    (string-match-p "\\`map\\[" sig))
+               (insert "[]"))
+              ((and (string= type "var")
+                    (string-match-p "\\`\\[]" sig))
+               (insert "[]"))
+              ((string= type "func")
+               (insert "()"))
+              (t (throw 'nothing nil)))
+        (forward-char -1)))))
+
 ;;;###autoload
 (defun go-capf ()
   "Return possible completions for go code at point."
@@ -125,6 +149,8 @@
                                      go-capf-ignore-case)
         :annotation-function (and go-capf-show-type
                                   #'go-capf--annotate)
+        :exit-function (and go-capf-add-braces
+                            #'go-capf--exit-func)
         :exclusive 'no))
 
 (provide 'go-capf)
